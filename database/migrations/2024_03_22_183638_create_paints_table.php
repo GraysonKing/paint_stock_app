@@ -16,7 +16,6 @@ return new class extends Migration
             $table->string('name');
             $table->string('colour_code');
             $table->integer('stock');
-            $table->string('lane');
             $table->timestamps();
         });
     }

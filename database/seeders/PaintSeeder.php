@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use App\Models\Paint; // Replace with your Paint model path
+use App\Models\Paint;
 
 class PaintSeeder extends Seeder
 {
@@ -16,28 +16,28 @@ class PaintSeeder extends Seeder
         $paints = [
             [
                 'name' => 'Blue',
-                'color_code' => '#0000FF',
-                'quantity' => 100,
+                'colour_code' => '#0000FF',
+                'stock' => 100,
             ],
             [
                 'name' => 'Grey',
-                'color_code' => '#808080',
-                'quantity' => 50,
+                'colour_code' => '#808080',
+                'stock' => 50,
             ],
             [
                 'name' => 'Black',
-                'color_code' => '#000000',
-                'quantity' => 75,
+                'colour_code' => '#000000',
+                'stock' => 75,
             ],
             [
                 'name' => 'Snow White',
-                'color_code' => '#FFFFFF',
-                'quantity' => 120,
+                'colour_code' => '#FFFFFF',
+                'stock' => 120,
             ],
             [
                 'name' => 'Purple',
-                'color_code' => '#800080',
-                'quantity' => 60,
+                'colour_code' => '#800080',
+                'stock' => 60,
             ],
         ];
 
