@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Inertia\Inertia;
 use App\Http\Requests\StorePaintRequest;
 use App\Http\Requests\UpdatePaintRequest;
 use App\Models\Paint;
@@ -13,7 +14,11 @@ class PaintController extends Controller
      */
     public function index()
     {
-        //
+        $paints = Paint::all();
+
+        return Inertia::render('ManagePaints', [
+            'paints' => $paints,
+        ]);
     }
 
     /**

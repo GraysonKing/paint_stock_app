@@ -30,7 +30,7 @@ class PaintSeeder extends Seeder
                 'stock' => 75,
             ],
             [
-                'name' => 'Snow White',
+                'name' => 'White',
                 'colour_code' => '#FFFFFF',
                 'stock' => 120,
             ],
