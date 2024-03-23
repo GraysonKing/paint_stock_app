@@ -18,11 +18,9 @@ const PaintCard = ({ paint, onUpdate }) => {
                     <input
                         id={`stock-${paint.id}`}
                         type="number"
-                        className="border px-2 py-1 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 w-full w-auto"
-                        value={paint.stock}
-                        onChange={(e) =>
-                            onUpdate(paint, e.target.value)
-                        }
+                        className="border px-2 py-1 rounded-md focus:ring-1 focus:ring-blue-500 w-full w-auto [appearance:textfield]"
+                        defaultValue={paint.stock}
+                        onBlur={(e) => onUpdate(paint, e.target.value)}
                     />
                 </div>
             </div>
