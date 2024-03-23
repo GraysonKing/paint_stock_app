@@ -1,30 +1,26 @@
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { useState, useEffect } from "react";
 import PaintCard from "@/Components/PaintCard";
+import axios from "axios";
 
 const KanbanBoard = (paintData) => {
     const [paints, setPaints] = useState(paintData.paintData);
-    const [columns, setColumns] = useState([
-        { id: 0, title: "Available", items: [] },
-        { id: 1, title: "Running Low", items: [] },
-        { id: 2, title: "Out of Stock", items: [] },
-    ]);
+    const [columns, setColumns] = useState([]);
 
     // reorders paints to their correct columns
     const reorderPaints = () => {
-        const newColumns = [...columns];
+        const newColumns = [
+            { id: 0, title: "Available", items: [] },
+            { id: 1, title: "Running Low", items: [] },
+            { id: 2, title: "Out of Stock", items: [] },
+        ];
         const low = 10;
         const out = 0;
 
-        paints.forEach(paint => {
-            console.log(paint, 'paint');
-
-            if (paint['stock'] === out)
-                newColumns[2].items.push(paint);
-            else if (paint['stock'] <= low)
-                newColumns[1].items.push(paint);
-            else
-                newColumns[0].items.push(paint);
+        paints.forEach((paint) => {
+            if (paint["stock"] == out) newColumns[2].items.push(paint);
+            else if (paint["stock"] <= low) newColumns[1].items.push(paint);
+            else newColumns[0].items.push(paint);
 
             setColumns(newColumns);
         });
@@ -48,18 +44,13 @@ const KanbanBoard = (paintData) => {
         // extract paints from source and destination columns
         const sourcePaints = [...sourceColumn.items];
         const destinationPaints = [...destinationColumn.items];
-        console.log(sourcePaints, "sourcePaints before move");
-        console.log(destinationPaints, "destinationPaints before move");
         const [removed] = sourcePaints.splice(droppableSource.index, 1); // delete moved paint from old index in source paints.
         destinationPaints.splice(droppableDestination.index, 0, removed); // add moved paint to new index in destination paints.
 
-        console.log(sourcePaints, "sourcePaints after move");
-        console.log(destinationPaints, "destinationPaints after move");
         const result = {};
         result[droppableSource.droppableId] = sourcePaints;
         result[droppableDestination.droppableId] = destinationPaints;
 
-        console.log(result, "result");
         return result;
     };
 
@@ -71,8 +62,7 @@ const KanbanBoard = (paintData) => {
         // Get indexes of the source and destination columns.
         const sourceIndex = parseInt(source.droppableId);
         const destinationIndex = parseInt(destination.droppableId);
-        console.log(sourceIndex, "source");
-        console.log(destinationIndex, "destination");
+
         if (sourceIndex === destinationIndex) {
             // Moving within the same column
             const items = reorderCard(
@@ -80,6 +70,7 @@ const KanbanBoard = (paintData) => {
                 source.index,
                 destination.index
             );
+
             const newColumns = [...columns];
             newColumns[sourceIndex].items = items; // put edited items list into new columns
             setColumns(newColumns);
@@ -91,16 +82,35 @@ const KanbanBoard = (paintData) => {
                 source,
                 destination
             );
+
             const newColumns = [...columns];
-            console.log(result, "result right before setColumns");
             newColumns[sourceIndex].items = result[source.droppableId];
-            newColumns[destinationIndex].items =
-                result[destination.droppableId];
-            console.log(newColumns, "newColumns after move.");
+            newColumns[destinationIndex].items = result[destination.droppableId];
             setColumns(newColumns);
         }
 
         // TODO: Update stock for paint once moved.
+    };
+
+    const updateStock = (paint, newValue) => {
+        if(newValue) {
+            paint.stock = newValue;
+
+            // call api route.
+            axios.patch(route('paints.update'), {
+                id: paint.id,
+                stock: newValue,
+              })
+              .then((response) => {
+                console.log("Stock updated successfully:", response.data);
+              })
+              .catch((error) => {
+                console.error("Error updating stock:", error);
+              });
+
+            // reorder paints to reflect change.
+            reorderPaints();
+        }
     };
 
     useEffect(() => {
@@ -118,7 +128,9 @@ const KanbanBoard = (paintData) => {
                                     {...provided.droppableProps}
                                     ref={provided.innerRef}
                                 >
-                                    <h2>{column.title}</h2>
+                                    <h2 className="text-xl font-bold p-4">
+                                        {column.title}
+                                    </h2>
                                     {column.items.map((paint, index) => (
                                         <Draggable
                                             key={paint.id}
@@ -131,7 +143,10 @@ const KanbanBoard = (paintData) => {
                                                     {...provided.dragHandleProps}
                                                     ref={provided.innerRef}
                                                 >
-                                                    <PaintCard paint={paint} />
+                                                    <PaintCard
+                                                        paint={paint}
+                                                        onUpdate={updateStock}
+                                                    />
                                                 </div>
                                             )}
                                         </Draggable>

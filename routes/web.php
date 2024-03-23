@@ -19,7 +19,10 @@ Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/paints', [PaintController::class, 'index'])->middleware(['auth', 'verified'])->name('paints');
+Route::middleware('auth')->group(function () {
+    Route::get('/paints', [PaintController::class, 'index'])->name('paints');
+    Route::patch('/paints', [PaintController::class, 'update'])->name('paints.update');
+});
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
