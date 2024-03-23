@@ -45,7 +45,7 @@ const KanbanBoard = (paintData) => {
         const sourcePaints = [...sourceColumn.items];
         const destinationPaints = [...destinationColumn.items];
         const [removed] = sourcePaints.splice(droppableSource.index, 1); // delete moved paint from old index in source paints.
-        console.log(removed, 'removed');
+
         if(droppableDestination.droppableId == 0) { // Available
             updateStock(removed, 11)
         } else if(droppableDestination.droppableId == 1) { // Running Low
@@ -53,7 +53,6 @@ const KanbanBoard = (paintData) => {
         } else if(droppableDestination.droppableId == 2) { // Out of Stock
             updateStock(removed, 0)
         }
-        console.log(droppableDestination, 'destination')
         destinationPaints.splice(droppableDestination.index, 0, removed); // add moved paint to new index in destination paints.
 
         const result = {};

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PaintController;
+use App\Http\Controllers\UserController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -22,6 +23,11 @@ Route::get('/dashboard', function () {
 Route::middleware('auth')->group(function () {
     Route::get('/paints', [PaintController::class, 'index'])->name('paints');
     Route::patch('/paints', [PaintController::class, 'update'])->name('paints.update');
+});
+
+Route::middleware('auth')->group(function () {
+    Route::get('/users', [UserController::class, 'index'])->name('users');
+    Route::post('/users/{user}/roles-permissions', [UserController::class, 'updateRolesPermissions'])->name('users.roles.permissions');
 });
 
 Route::middleware('auth')->group(function () {
