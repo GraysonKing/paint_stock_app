@@ -17,27 +17,27 @@ class PaintSeeder extends Seeder
             [
                 'name' => 'Blue',
                 'colour_code' => '#0000FF',
-                'stock' => 100,
+                'stock' => 11,
             ],
             [
                 'name' => 'Grey',
                 'colour_code' => '#808080',
-                'stock' => 50,
+                'stock' => 0,
             ],
             [
                 'name' => 'Black',
                 'colour_code' => '#000000',
-                'stock' => 75,
+                'stock' => 7,
             ],
             [
                 'name' => 'White',
                 'colour_code' => '#FFFFFF',
-                'stock' => 120,
+                'stock' => 12,
             ],
             [
                 'name' => 'Purple',
                 'colour_code' => '#800080',
-                'stock' => 60,
+                'stock' => 9,
             ],
         ];
 
