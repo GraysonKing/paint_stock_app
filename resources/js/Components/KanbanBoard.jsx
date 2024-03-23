@@ -45,6 +45,15 @@ const KanbanBoard = (paintData) => {
         const sourcePaints = [...sourceColumn.items];
         const destinationPaints = [...destinationColumn.items];
         const [removed] = sourcePaints.splice(droppableSource.index, 1); // delete moved paint from old index in source paints.
+        console.log(removed, 'removed');
+        if(droppableDestination.droppableId == 0) { // Available
+            updateStock(removed, 11)
+        } else if(droppableDestination.droppableId == 1) { // Running Low
+            updateStock(removed, 10)
+        } else if(droppableDestination.droppableId == 2) { // Out of Stock
+            updateStock(removed, 0)
+        }
+        console.log(droppableDestination, 'destination')
         destinationPaints.splice(droppableDestination.index, 0, removed); // add moved paint to new index in destination paints.
 
         const result = {};
@@ -88,12 +97,10 @@ const KanbanBoard = (paintData) => {
             newColumns[destinationIndex].items = result[destination.droppableId];
             setColumns(newColumns);
         }
-
-        // TODO: Update stock for paint once moved.
     };
 
     const updateStock = (paint, newValue) => {
-        if(newValue) {
+        if(newValue !== null) {
             paint.stock = newValue;
 
             // call api route.
