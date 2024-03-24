@@ -107,9 +107,6 @@ const KanbanBoard = (paintData) => {
                 id: paint.id,
                 stock: newValue,
               })
-              .then((response) => {
-                console.log("Stock updated successfully:", response.data);
-              })
               .catch((error) => {
                 console.error("Error updating stock:", error);
               });
