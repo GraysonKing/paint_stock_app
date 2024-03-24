@@ -30,7 +30,7 @@ jobs:
             git pull origin master
             composer install --optimize-autoloader --no-interaction
             php artisan migrate --force
-            php artisan seed --force
+            php artisan db:seed --force
             npm run build
             sudo systemctl restart nginx
           ENDSSH
