@@ -1,36 +1,31 @@
 name: Deploy to EC2
 
 on:
-  push:
-    branches: [ master ]
+ push:
+   branches: [ master ]
 
 jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
+ deploy:
+   runs-on: ubuntu-latest
+   steps:
+     - uses: actions/checkout@v3
 
-      - name: Configure SSH agent
-        run: |
-         mkdir -p ~/.ssh
-         echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
-         chmod 600 ~/.ssh/id_rsa
+     - name: Configure SSH agent
+       run: |
+         echo "${{ secrets.SSH_PRIVATE_KEY }}" >> id_rsa
+         chmod 600 id_rsa
          eval "$(ssh-agent -s)"
-         ssh-add ~/.ssh/id_rsa
+         ssh-add id_rsa
 
-      - name: Install SSH dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y sshpass
-
-      - name: Deploy to server
-        run: |
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ubuntu@${{ secrets.EC2_PUBLIC_IP }} << 'ENDSSH'
-            cd /var/www/html/paint_stock_app
-            git pull origin master
-            composer install --optimize-autoloader --no-interaction
-            php artisan migrate --force
-            php artisan db:seed --force
-            npm run build
-            sudo systemctl restart nginx
-          ENDSSH
+     - name: Deploy to server
+       run: |
+         ssh -o StrictHostKeyChecking=no -i id_rsa ubuntu@${{ secrets.EC2_PUBLIC_IP }} << 'ENDSSH'
+           # Deployment commands on the server
+           cd /var/www/html/paint_stock_app
+           git pull origin master
+           composer install --optimize-autoloader --no-interaction
+           php artisan migrate --force
+           php artisan db:seed --force
+           npm run build
+           sudo systemctl restart nginx
+         ENDSSH
