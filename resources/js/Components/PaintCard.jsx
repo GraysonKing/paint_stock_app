@@ -2,10 +2,10 @@ import React from "react";
 
 const PaintCard = ({ paint, onUpdate }) => {
     return (
-        <div className="bg-white shadow-sm rounded-lg sm:w-full md:w-1/2 lg:w-1/3">
-            <div className="p-4 flex flex-col">
-                <h5 className="text-gray-900 font-bold">{paint.name}</h5>
-                <p className="text-gray-700 text-sm">
+        <div className="bg-white shadow-sm rounded-lg sm:w-full md:w-1/2 lg:w-1/3 mb-4">
+            <div className="p-4">
+                <h5 className="text-gray-900 font-bold text-lg mb-2">{paint.name}</h5>
+                <p className="text-gray-700 text-sm mb-2">
                     Colour Code: {paint.colour_code}
                 </p>
                 <div className="flex items-center">

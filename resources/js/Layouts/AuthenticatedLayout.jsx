@@ -156,6 +156,20 @@ export default function Authenticated({ user, header, children }) {
                         >
                             Dashboard
                         </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            href={route("paints")}
+                            active={route().current("paints")}
+                        >
+                            Manage Paints
+                        </ResponsiveNavLink>
+                        {isAdmin() && (
+                            <ResponsiveNavLink
+                                href={route("users")}
+                                active={route().current("users")}
+                            >
+                                Manage Users
+                            </ResponsiveNavLink>
+                        )}
                     </div>
 
                     <div className="pt-4 pb-1 border-t border-gray-200">
