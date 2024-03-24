@@ -11,6 +11,9 @@ use Spatie\Permission\Models\Permission;
 
 class UserController extends Controller
 {
+    /**
+     * Update the roles and permissions of a user.
+     */
     public function updateRolesPermissions(FormRequest $request)
     {
         if (!auth()->user()->hasRole('Admin')) {
