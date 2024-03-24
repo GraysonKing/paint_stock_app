@@ -24,10 +24,20 @@ jobs:
 
       - name: Deploy to server
         run: |
+          sshpass ${{ secrets.EC2_PUBLIC_IP }} ssh -o StrictHostKeyChecking=no -i id_rsa ubuntu@${{ secrets.EC2_PUBLIC_IP }} << 'ENDSSH'
+            # Deployment commands on the server
+            cd /var/www/html/paint_stock_app
             cd /var/www/html/paint_stock_app
             git pull origin master
+            git pull origin master
+            composer install --optimize-autoloader --no-interaction
             composer install --optimize-autoloader --no-interaction
             php artisan migrate --force
+            php artisan migrate --force
+            php artisan db:seed --force
             php artisan db:seed --force
             npm run build
+            npm run build
             sudo systemctl restart nginx
+            sudo systemctl restart nginx
+          ENDSSH
