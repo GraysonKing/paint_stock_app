@@ -12,10 +12,10 @@ jobs:
 
       - name: Configure SSH agent
         run: |
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" >> id_rsa
-          chmod 600 id_rsa
-          eval "$(ssh-agent -s)"
-          ssh-add id_rsa
+          mkdir -p ~/.ssh
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.EC2_PUBLIC_IP }} >> ~/.ssh/known_hosts
 
       - name: Install SSH dependencies
         run: |
@@ -24,8 +24,7 @@ jobs:
 
       - name: Deploy to server
         run: |
-          sshpass ${{ secrets.EC2_PUBLIC_IP }} ssh -o StrictHostKeyChecking=no -i id_rsa ubuntu@${{ secrets.EC2_PUBLIC_IP }} << 'ENDSSH'
-            # Deployment commands on the server
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ubuntu@${{ secrets.EC2_PUBLIC_IP }} << 'ENDSSH'
             cd /var/www/html/paint_stock_app
             git pull origin master
             composer install --optimize-autoloader --no-interaction
