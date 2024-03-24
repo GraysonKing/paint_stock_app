@@ -12,10 +12,11 @@ jobs:
 
       - name: Configure SSH agent
         run: |
-         echo "${{ secrets.SSH_PRIVATE_KEY }}" >> id_rsa
-         chmod 600 id_rsa
+         mkdir -p ~/.ssh
+         echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+         chmod 600 ~/.ssh/id_rsa
          eval "$(ssh-agent -s)"
-         ssh-add id_rsa
+         ssh-add ~/.ssh/id_rsa
 
       - name: Install SSH dependencies
         run: |
